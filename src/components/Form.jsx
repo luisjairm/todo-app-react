@@ -1,34 +1,53 @@
 import { useState } from 'react'
+import Error from './Error'
 
-const Form = () => {
+const Form = ({ tasks, setTasks }) => {
   const [taskName, setTaskName] = useState('')
   const [taskPriority, setTaskPriority] = useState('alta')
+  const [error, setError] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    console.log({ taskName, taskPriority })
+    if (taskName.length < 1) {
+      setError(true)
+      setTimeout(() => {
+        setError(false)
+      }, 3000)
+      return
+    }
+
+    const tmpTask = {
+      id: Date.now(),
+      name: taskName,
+      priority: taskPriority
+    }
+
+    setTasks([...tasks, tmpTask])
+    setTaskName('')
   }
 
   return (
-    <div className='md:w-2/5 rounded mr-5'>
+    <div className='w-full rounded-md'>
       <h1 className='font-black text-center text-xl mb-5'>Agrega tus tareas</h1>
       <form
         className='bg-white shadow-md p-5 rounded-md'
         onSubmit={handleSubmit}
       >
+        {error && <Error msj='Es obligatorio agregar una tarea' />}
         <div>
           <label
             htmlFor='task'
             className='block font-semibold text-xl mb-2'
           >Tarea
           </label>
-          <input
+          <textarea
             onChange={e => setTaskName(e.target.value)}
             type='text'
             id='task'
             className='w-full border-2 border-gray-400 rounded p-2'
             placeholder='Escribe tu tarea'
+            value={taskName}
           />
         </div>
         <div>
