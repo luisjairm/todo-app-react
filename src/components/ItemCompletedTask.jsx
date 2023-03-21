@@ -1,7 +1,20 @@
 import React from 'react'
 
-const ItemCompletedTask = ({ task }) => {
-  const { name, priority } = task
+const ItemCompletedTask = ({ task, removeTaskCompleted }) => {
+  const { name, priority, id } = task
+
+  const handleDelete = () => {
+    // eslint-disable-next-line no-undef
+    const response = confirm('¿Quieres eliminar la tarea antes de completarla?')
+    if (response) {
+      removeTaskCompleted(id)
+    }
+  }
+  const optionColors = {
+    alta: 'uppercase text-red-700 font-bold',
+    media: 'uppercase text-yellow-700 font-bold',
+    baja: 'uppercase text-green-700 font-bold'
+  }
   return (
     <div className='bg-white rounded-xl p-3 mb-2 shadow-md flex flex-row justify-between'>
       <div>
@@ -11,13 +24,13 @@ const ItemCompletedTask = ({ task }) => {
         </div>
         <div className='mt-2'>
           <h3 className='uppercase font-bold'>Prioridad:</h3>
-          <p className='uppercase'>{priority}</p>
+          <p className={optionColors[priority]}>{priority}</p>
         </div>
       </div>
       <div className='flex flex-col justify-center'>
-        <span onClick={() => { console.log('Eliminando') }}>
+        <span onClick={handleDelete}>
           <svg
-            className='fill-current h-5 w-5 text-red-500'
+            className='fill-current h-5 w-5 text-red-500  hover:text-red-700'
             role='button'
             xmlns='http://www.w3.org/2000/svg'
             viewBox='0 0 448 512'
